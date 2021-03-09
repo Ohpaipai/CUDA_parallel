@@ -63,16 +63,18 @@ int main(int argc, char **argv){
 					printf("thread %d : %d loop\n",omp_get_thread_num(),i*5+j);
 	}*/
 	int i, j;
-	int a;
-	a = 100000;
-#pragma omp parallel for num_threads(2) private(j) firstprivate(a)
+	int *a;
+	int b;
+	a=&b;
+	*a = 100000;
+#pragma omp parallel for num_threads(2) private(j)
 for (i = 0; i < 4; i++)
     for (j = 0; j <4; j++){
         printf("%d %d %d\n", i, j, omp_get_thread_num());
-		//(a)++;
+		(*a)++;
 //		printf("Test %d\n",a);
 	}
-//printf("%d\n",a);
+printf("%d\n",*a);
 		printf("------------------------------------------------------------------------\n");
 /*yy	#pragma omp parallel for private(j)
 		for(i=0;i<5;i++)

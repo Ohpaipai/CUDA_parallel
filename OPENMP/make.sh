@@ -1,1 +1,1 @@
-gcc -fopenmp -o op $1
+g++ -fopenmp -o op $1
