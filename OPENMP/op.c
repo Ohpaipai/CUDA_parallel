@@ -1,6 +1,14 @@
 #include<omp.h>
+#include<iostream>
 #include<stdio.h>
+void cc(int &b){
+	b=100;
+}
 int main(int argc, char **argv){
+	int h=0;
+	std::cout<<"h = "<<h<<std::endl;
+	cc(h);
+	std::cout<<"h = "<<h<<std::endl;
  //example1 ~ 2.
 /*	#pragma omp parallel for
 //	{
@@ -67,9 +75,11 @@ int main(int argc, char **argv){
 	int b;
 	a=&b;
 	*a = 100000;
+	int x;
+	std::cin>>x;
 #pragma omp parallel for num_threads(2) private(j)
-for (i = 0; i < 4; i++)
-    for (j = 0; j <4; j++){
+for (i = 0; i < x; i++)
+    for (j = 0; j <x; j++){
         printf("%d %d %d\n", i, j, omp_get_thread_num());
 		(*a)++;
 //		printf("Test %d\n",a);
