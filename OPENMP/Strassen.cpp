@@ -2,12 +2,13 @@
 #include<omp.h>
 #include<stdio.h>
 #include<time.h>
-#define N 2048
+#define N 512
 //Matrix define
+//
+
 typedef struct Matrix{
 	int MX[N][N]={0};
 	int size=N;
-	
 	Matrix operator=(Matrix a){
 		int i,j;
 		#pragma omp parallel for private(j)
@@ -189,6 +190,7 @@ void Strassen(int n, M &A, M &B, M &C){
 
 
 int main(){
+	//std::cout<<"Hello!"<<std::endl;
 	struct timespec t_start, t_end;
 	double elapsedTime;
 	int i, j, k;
