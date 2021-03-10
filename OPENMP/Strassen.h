@@ -1,6 +1,6 @@
 #include<iostream>
 #include<omp.h>
-
+#include<algorithm>
 
 //#ifndef INCLUDED_STRASSEN
 //#define INCLUDED_STRASSEN
@@ -15,17 +15,17 @@ class Matrix{
 	}
 	Matrix(int size){
 		this->n = size;
-		this->M = new int *[size];
+		M = new int* [size];
 		for(int i = 0; i <size; i++)
-			this->M[i] = new int[size];
+			M[i] = new int[size];
 	}
 	~Matrix(){
-		for(int i = 0; i <this->n; i++)
+		for(int i = 0; i <n; i++)
 			delete[] this->M[i];
 		delete[] this->M;
 	}
 	void Delete(){
-		for(int i = 0; i <this->n; i++)
+		for(int i = 0; i <n; i++)
 			delete[] this->M[i];
 		delete[] this->M;
 	}
@@ -34,14 +34,15 @@ class Matrix{
 		int i,j;
 		Matrix R(A.n);
 		R.n=A.n;
-//		std::cout<<"d\n";
 		#pragma omp parallel for private(j)
 			for(i=0;i<A.n; i++){
 				for(j=0;j<A.n; j++){
-//					std::cout<<A.M[i][j]<<std::endl;
 					R.M[i][j] = A.M[i][j];
+					M[i][j]=A.M[i][j];
 				}
 			}
+	//	std::cout<<"\n"<<R<<"\n";
+		
 		return R;
 	}
 
@@ -52,7 +53,7 @@ class Matrix{
 		#pragma omp parallel for private(j)
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
-					R.M[i][j]=this->M[i][j] + A.M[i][j];
+					R.M[i][j]=M[i][j] + A.M[i][j];
 				}
 			}
 		return R;
@@ -66,7 +67,7 @@ class Matrix{
 		#pragma omp parallel for private(j)
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
-					R.M[i][j]=this->M[i][j] - A.M[i][j];
+					R.M[i][j]=M[i][j] - A.M[i][j];
 				}
 			}
 		return R;
@@ -76,22 +77,25 @@ class Matrix{
 	Matrix operator*(const Matrix& A){
 		Matrix R(A.n);
 		Matrix At(A.n);
+		At=A;
 		int i,j,k;
 
 		//transpose
 		#pragma omp parallel for private(j)
 		for( i=0; i<R.n; i++ ){
-			for( j=0; j<R.n; j++ ) {
-				At.M[j][i] = A.M[i][j];
+			for( j=i; j<R.n; j++ ) {
+				std::swap(At.M[i][j], At.M[j][i]);
 			}
 		}
+
+		//std::cout<<A<<"\n"<<At<<"\n";
 
 		#pragma omp parallel for private(j) private(k)
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
 					R.M[i][j]=0;
 					for(k=0; k<R.n;k++){
-						R.M[i][j]+=this->M[i][j] + A.M[i][j];
+						R.M[i][j]+=M[i][k] * At.M[j][k];
 					}
 				}
 			}
@@ -102,10 +106,9 @@ class Matrix{
 	bool operator==(const Matrix& A){
 		bool R=true;
 		int i,j;
-		#pragma omp parallel for private(j)
-			for(i=0; i<this->n; i++){
-				for(j=0; j<this->n; j++){
-					if(this->M[i][j]!= A.M[i][j])
+			for(i=0; i<n; i++){
+				for(j=0; j<n; j++){
+					if(M[i][j]!= A.M[i][j])
 						R=false;
 				}
 			}

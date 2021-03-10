@@ -4,7 +4,9 @@
 
 void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 	int halfsize=_n/2;
+	//128
 	if( _n<=128){
+//		std::cout<<_A<<"\n"<<_B<<"\n";
 		_C=_A*_B;
 	}
 	else{
@@ -31,14 +33,19 @@ void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 				B22.M[i][j] = _B.M[i+_n/2][j+_n/2];
 			}
 		}
-
+/*	
+ 		std::cout<<"A=\n";
+		std::cout <<A11 << std::endl<<A12<<std::endl<<A21<<std::endl<<A22<<std::endl;
+		std::cout<<"B=\n";
+		std::cout <<B11 << std::endl<<B12<<std::endl<<B21<<std::endl<<B22<<std::endl;
+*/
 		#pragma omp sections
 		{
 			#pragma omp section
 			{
 				//M1=(A11+A22)*(B11+B22)
 				AA1=A11+A22;
-				BB2=B11+B22;
+				BB1=B11+B22;
 			}
 			#pragma omp section
 			{
@@ -126,7 +133,6 @@ void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 //		#pragma omp task 
 		//Strassen(halfsize, AA, BB, M7);
 		Strassen(halfsize, AA5, BB5, M7);
-	
 		#pragma omp sections
 		{
 			#pragma omp section
@@ -183,28 +189,32 @@ int main(){
 			B.M[i][j] = rand()%10;
 		}
 	}
-	//std::cout<<A<<"\n"<<B<<std::endl;
+//	std::cout<<A<<"\n"<<B<<std::endl;
 	//copy
 	BS=B;
-	//std::cout<<BS;
 	/*Sequintal*/
 	clock_gettime( CLOCK_REALTIME, &t_start);
-/*   		//transpose of b
+  		//transpose of b
 		for( i=0; i<N; i++ ){
-			for( j=0; j<N; j++ ) {
+			for( j=i; j<N; j++ ) {
 				temp = BS.M[j][i];
 				BS.M[j][i] = BS.M[i][j];
 				BS.M[i][j] = temp;
 			}
 		}
+
+	//std::cout<<"BS=\n"<<BS<<"\n";
+
 		for( i=0; i<N; i++ ){
 			for( j=0; j<N; j++ ) {
 				CS.M[i][j] = 0;
 				for( k=0; k<N; k++ ){
 					CS.M[i][j] += A.M[i][k]*BS.M[j][k];
+//					std::cout<<CS.M[i][j]<<std::endl;
 				}
 			}
-		}*/
+		}
+//	std::cout<<CS;
 	clock_gettime( CLOCK_REALTIME, &t_end);
 	
 	// compute and print the elapsed time in millisec
@@ -222,6 +232,8 @@ int main(){
 	elapsedTime += (t_end.tv_nsec - t_start.tv_nsec) / 1000000.0;
 	printf("Strassen elapsedTime: %lf ms\n", elapsedTime);
 
+
+//	std::cout<<C<<"\n"<<CS;
 	if(CS==C)
 		std::cout<<"True\n";
 	else
