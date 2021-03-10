@@ -1,6 +1,7 @@
 #include<iostream>
 #include<omp.h>
 #include<stdio.h>
+#include"Strassen.h"
 #include<time.h>
 #define N 512
 //Matrix define
