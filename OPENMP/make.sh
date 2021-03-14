@@ -1,1 +1,1 @@
-g++  -fopenmp -o op $1
+g++  -fopenmp -o Strassen StrassenMain.cpp

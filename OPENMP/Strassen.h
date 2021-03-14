@@ -1,7 +1,8 @@
+#include<stdio.h>
 #include<iostream>
 #include<omp.h>
 #include<algorithm>
-
+#define T 16
 //#ifndef INCLUDED_STRASSEN
 //#define INCLUDED_STRASSEN
 
@@ -34,8 +35,8 @@ class Matrix{
 		int i,j;
 		Matrix R(A.n);
 		R.n=A.n;
-		//#pragma omp parallel for private(j) schedule(static, 16)
-		#pragma omp parallel for private(j) 
+		#pragma omp parallel for private(j) schedule(static, T)
+		//#pragma omp parallel for private(j) 
 			for(i=0;i<A.n; i++){
 				for(j=0;j<A.n; j++){
 					R.M[i][j] = A.M[i][j];
@@ -51,8 +52,8 @@ class Matrix{
 	Matrix operator+(const Matrix& A){
 		Matrix R(A.n);
 		int i,j;
-	//	#pragma omp parallel for private(j) schedule(static,16)
-		#pragma omp parallel for private(j) 
+		#pragma omp parallel for private(j) schedule(static,T)
+		//#pragma omp parallel for private(j) 
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
 					R.M[i][j]=M[i][j] + A.M[i][j];
@@ -66,8 +67,8 @@ class Matrix{
 	Matrix operator-(const Matrix& A){
 		Matrix R(A.n);
 		int i,j;
-		//#pragma omp parallel for private(j) schedule(static, 16)
-		#pragma omp parallel for private(j) 
+		#pragma omp parallel for private(j) schedule(static, T)
+		//#pragma omp parallel for private(j) 
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
 					R.M[i][j]=M[i][j] - A.M[i][j];
@@ -84,8 +85,8 @@ class Matrix{
 		int i,j,k;
 
 		//transpose
-		//#pragma omp parallel for private(j) schedule(static, 16)
-		#pragma omp parallel for private(j) 
+		#pragma omp parallel for private(j) schedule(static, T)
+		//#pragma omp parallel for private(j) 
 		for( i=0; i<R.n; i++ ){
 			for( j=i; j<R.n; j++ ) {
 				std::swap(At.M[i][j], At.M[j][i]);
@@ -94,8 +95,8 @@ class Matrix{
 
 		//std::cout<<A<<"\n"<<At<<"\n";
 
-		//#pragma omp parallel for private(j) private(k) schedule(static, 16)
-		#pragma omp parallel for private(j) private(k) 
+		#pragma omp parallel for private(j) private(k) schedule(static, T)
+		//#pragma omp parallel for private(j) private(k) 
 			for(i=0; i<R.n; i++){
 				for(j=0; j<R.n; j++){
 					R.M[i][j]=0;
