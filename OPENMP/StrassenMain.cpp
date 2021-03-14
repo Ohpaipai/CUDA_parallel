@@ -88,51 +88,59 @@ void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 //		#pragma omp task shared(M1) 
 //		#pragma omp task 
 		//Strassen(halfsize, AA, BB, M1);
+//		#pragma omp sections
+//			#pragma omp section
 		Strassen(halfsize, AA1, BB1, M1);	
-
 		//M2=(A21+A22)*B11
 		//AA=A21+A22; //AA2
 //		#pragma omp task shared(M2)
 //		#pragma omp task 
 		//Strassen(halfsize, AA, B11, M2);
+//			#pragma omp section
 		Strassen(halfsize, AA2, B11, M2);
-
 		//M3=A11*(B12-B22)
 		//BB=B12-B22; //BB2
 //		#pragma omp task shared(M3)
 //		#pragma omp task 
 		//Strassen(halfsize, A11, BB, M3);
+//			#pragma omp section
 		Strassen(halfsize, A11, BB2, M3);
-		
 		//M4=A22*(B21-B11)
 		//BB=B21-B11; //BB3
 //		#pragma omp task shared(M4)
 //		#pragma omp task 
 		//Strassen(halfsize, A22, BB, M4);
+//			#pragma omp section
 		Strassen(halfsize, A22, BB3, M4);
-
 		//M5=(A11+A12)*B22
 		//AA=A11+A12; //AA3
 //		#pragma omp task shared(M5)
 //		#pragma omp task 
 		//Strassen(halfsize, AA, B22, M5);
+//			#pragma omp section
 		Strassen(halfsize, AA3, B22, M5);
-
 		//M6=(A21-A11)*(B11+B22)
 		//AA=A21-A11; //AA4
 		//BB=B11+B12; //BB4
 //		#pragma omp task shared(M6)
 //		#pragma omp task 
 		//Strassen(halfsize, AA, BB, M6);
+//			#pragma omp section
 		Strassen(halfsize, AA4, BB4, M6);
-
 		//M7=(A12-A22)*(B21+B22)
 		//AA=A12-A22; //AA5
 		//BB=B21+B22; //BB5
 //		#pragma omp task shared(M7)
 //		#pragma omp task 
 		//Strassen(halfsize, AA, BB, M7);
+//			#pragma omp section
 		Strassen(halfsize, AA5, BB5, M7);
+		
+
+
+
+
+
 		#pragma omp sections
 		{
 			#pragma omp section
@@ -215,6 +223,7 @@ int main(){
 			}
 		}
 //	std::cout<<CS;
+
 	clock_gettime( CLOCK_REALTIME, &t_end);
 	
 	// compute and print the elapsed time in millisec
