@@ -1,7 +1,7 @@
 #include"Strassen.h"
 #include<time.h>
 #define N 2048
-
+/*{{{*/
 void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 	int halfsize=_n/2;
 	//128
@@ -180,7 +180,7 @@ void Strassen(int _n, Matrix &_A, Matrix &_B, Matrix &_C){
 	}
 
 }
-
+/*}}}*/
 
 int main(){
 	struct timespec t_start, t_end;
@@ -225,7 +225,6 @@ int main(){
 //	std::cout<<CS;
 
 	clock_gettime( CLOCK_REALTIME, &t_end);
-	
 	// compute and print the elapsed time in millisec
 	elapsedTime = (t_end.tv_sec - t_start.tv_sec) * 1000.0;
 	elapsedTime += (t_end.tv_nsec - t_start.tv_nsec) / 1000000.0;
