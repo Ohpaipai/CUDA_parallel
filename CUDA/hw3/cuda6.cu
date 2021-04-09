@@ -2,14 +2,20 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 #include<time.h>
-
+#define blknum 1
+#define threadnum 1
 #define N 10000000
 __global__ void add( int *a, int *b, int *c ){
-    int tid = threadIdx.x;
-	for(int i=tid;i<N;i++){
-		//printf("%d\n",i);
+    int idx =blockDim.x*blockIdx.x+threadIdx.x;
+    int idy =blockDim.y*blockIdx.y+threadIdx.y;
+	int blkid = blockIdx.y*gridDim.x+blockIdx.x;
+	int id = idy*gridDim.x*blockDim.x+idx;
+	for(int i=id;i<N;i+=1){
 		c[i] = a[i] + b[i];
 	}
+	
+//	if(blkid<N)
+//		c[blkid] = a[blkid]+b[blkid];
 }
 
 
@@ -43,10 +49,10 @@ int main( void ) {
 	cudaEventCreate(&stop);
 	cudaEventRecord(start, 0);
 	/*}}}*/
-
 	//GPU kernel function
-    add<<<1,512>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
-    
+	dim3 gridsize(32,32);
+	dim3 blocksize(32,32);
+	add<<<gridsize,threadnum>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
 	/* Get stop time event{{{*/
 	cudaEventRecord(stop, 0);
 	cudaEventSynchronize(stop); 

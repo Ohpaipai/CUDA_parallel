@@ -52,8 +52,8 @@ int main( void ) {
 	
 	//GPU kernel function
 	   	 
-	dim3 blocksize(64,16);
-	add<<<blocknum,blocksize>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
+	dim3 blocksize(32,32);
+	add<<<blknum,blocksize>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
     
 	/* Get stop time event{{{*/
 	cudaEventRecord(stop, 0);

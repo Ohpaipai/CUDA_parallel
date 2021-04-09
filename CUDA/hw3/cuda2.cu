@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 #include<time.h>
-#define blknum 32
+#define blknum 128
 #define N 10000000
 __global__ void add( int *a, int *b, int *c ){
+//    int tid = threadIdx.x + blockIdx.x*blockDim.x;
     int tid = threadIdx.x;
 	int blkid = blockDim.x;
 	for(int i=tid;i<N;i+=blkid){

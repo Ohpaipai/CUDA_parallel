@@ -2,16 +2,20 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 #include<time.h>
-#define blknum 32
+#define blknum  1024
 #define threadnum 1024
 #define N 10000000
 __global__ void add( int *a, int *b, int *c ){
-    int tid = threadIdx.x+blockDim.x;
+//    int tid = threadIdx.x+blockDim.x;
+   // int tid = threadIdx.x;
+	int tid = blockIdx.x * blockDim.x + threadIdx.x;
 	int blkid = blockDim.x;
-	for(int i=tid;i<N;i+=blkid){
+/*	for(int i=tid;i<N;i+=blkid){
 		//printf("%d\n",i);
 		c[i] = a[i] + b[i];
-	}
+	}*/
+	if(tid<N)
+		c[tid] = a[tid] + b[tid];
 //	if(blkid<N)
 //		c[blkid] = a[blkid]+b[blkid];
 }
