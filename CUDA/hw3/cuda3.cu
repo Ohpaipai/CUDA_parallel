@@ -2,14 +2,18 @@
 #include <stdlib.h>
 #include <cuda_runtime.h>
 #include<time.h>
-
+#define blknum 32
+#define threadnum 1024
 #define N 10000000
 __global__ void add( int *a, int *b, int *c ){
-    int tid = threadIdx.x;
-	for(int i=tid;i<N;i++){
+    int tid = threadIdx.x+blockDim.x;
+	int blkid = blockDim.x;
+	for(int i=tid;i<N;i+=blkid){
 		//printf("%d\n",i);
 		c[i] = a[i] + b[i];
 	}
+//	if(blkid<N)
+//		c[blkid] = a[blkid]+b[blkid];
 }
 
 
@@ -45,7 +49,7 @@ int main( void ) {
 	/*}}}*/
 
 	//GPU kernel function
-    add<<<1,1024>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
+    add<<<blknum,threadnum>>>( dev_a, dev_b, dev_c ); //1 block 1024 thread
     
 	/* Get stop time event{{{*/
 	cudaEventRecord(stop, 0);
