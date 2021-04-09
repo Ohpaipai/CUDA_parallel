@@ -8,9 +8,9 @@
 __global__ void add( int *a, int *b, int *c ){
     int idx =blockDim.x*blockIdx.x+threadIdx.x;
     int idy =blockDim.y*blockIdx.y+threadIdx.y;
-	int blkid = blockIdx.y*gridDim.x+blockIdx.x;
 	int id = idy*gridDim.x*blockDim.x+idx;
-	for(int i=id;i<N;i+=1){
+	int gride = blockDim.x*blockDim.y*gridDim.x*gridDim.y;
+	for(int i=id;i<N;i+=gride){
 		c[i] = a[i] + b[i];
 	}
 	

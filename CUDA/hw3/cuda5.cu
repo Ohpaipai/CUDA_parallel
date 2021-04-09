@@ -8,7 +8,8 @@
 __global__ void add( int *a, int *b, int *c ){
     int tid =threadIdx.x; //only one thread
 	int blkid = blockIdx.y*gridDim.x+blockIdx.x;
-	for(int i=blkid;i<N;i+=1){
+	int stride = blockDim.x*blockDim.y*gridDim.x*gridDim.y;
+	for(int i=blkid;i<N;i+=stride){
 		c[i] = a[i] + b[i];
 	}
 	

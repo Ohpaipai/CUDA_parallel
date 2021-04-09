@@ -9,13 +9,11 @@ __global__ void add( int *a, int *b, int *c ){
 //    int tid = threadIdx.x+blockDim.x;
    // int tid = threadIdx.x;
 	int tid = blockIdx.x * blockDim.x + threadIdx.x;
-	int blkid = blockDim.x;
-/*	for(int i=tid;i<N;i+=blkid){
+	int stride = blockDim.x*blockDim.y*gridDim.x*gridDim.y;
+	for(int i=tid;i<N;i+=stride){
 		//printf("%d\n",i);
 		c[i] = a[i] + b[i];
-	}*/
-	if(tid<N)
-		c[tid] = a[tid] + b[tid];
+	}
 //	if(blkid<N)
 //		c[blkid] = a[blkid]+b[blkid];
 }

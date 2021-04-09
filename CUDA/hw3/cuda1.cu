@@ -5,8 +5,9 @@
 
 #define N 10000000
 __global__ void add( int *a, int *b, int *c ){
-    int tid = threadIdx.x;
-	for(int i=tid;i<N;i++){
+    int tid = threadIdx.x + blockIdx.x*blockDim.x;
+	int stride = blockDim.x*blockDim.y*gridDim.x*gridDim.y;
+	for(int i=tid;i<N;i+=stride){
 		//printf("%d\n",i);
 		c[i] = a[i] + b[i];
 	}
