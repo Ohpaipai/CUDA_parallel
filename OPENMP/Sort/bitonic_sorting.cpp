@@ -2,6 +2,8 @@
 #include<omp.h>
 #include<algorithm>
 #include<time.h>
+#include<stdio.h>
+#include<stdlib.h>
 //#define N  1000000
 //#define degree2ofN 1048576
 #define N  1000000
@@ -59,27 +61,34 @@ int main(int argc, char** argv){
 		array[i] = rand()%1000000;
 		s_array[i] = array[i];
 	}
-	bool c=true;
-	for(i=0; i<N; i++){
-		if(array[i]!=s_array[i]){
-			c=false;
-			break;
-		}
-	}
-	if(c)
-		std::cout<<"True\n";
-	else
-		std::cout<<"False\n";
 
 	for(i=N;i<degree2ofN;i++){
 		array[i] = 1000000 + i ;
 //		std::cout<<array[i]<<" ";
 	}
-	std::sort(s_array,s_array + N);
 	//start
 	clock_gettime( CLOCK_REALTIME, &t_start);
+	std::sort(s_array,s_array + N);
+	//end
+	clock_gettime( CLOCK_REALTIME, &t_end);
+	// compute and print the elapsed time in millisec
+	elapsedTime = (t_end.tv_sec - t_start.tv_sec) * 1000.0;
+	elapsedTime += (t_end.tv_nsec - t_start.tv_nsec) / 1000000.0;
+	printf("Sort elapsedTime: %lf ms\n", elapsedTime);
+
+
+
+
+
+
+
+
+
+
+//start
+	clock_gettime( CLOCK_REALTIME, &t_start);
 	for( i=2;i<=degree2ofN;i*=2){ //最外層 每次做都是 2的次方
-		#pragma omp parallel for private(j)
+//		#pragma omp parallel for
 		for(j = 0; j <degree2ofN; j+=i){ //2每次交換的index差距
 			int pn = (j/i)%2;
 			if(pn==0){
@@ -95,7 +104,8 @@ int main(int argc, char** argv){
 	// compute and print the elapsed time in millisec
 	elapsedTime = (t_end.tv_sec - t_start.tv_sec) * 1000.0;
 	elapsedTime += (t_end.tv_nsec - t_start.tv_nsec) / 1000000.0;
-	printf("Sequential elapsedTime: %lf ms\n", elapsedTime);
+	printf("b_sort elapsedTime: %lf ms\n", elapsedTime);
+	bool c=true;
 	for(i=0; i<N; i++){
 		if(array[i]!=s_array[i]){
 			c=false;
