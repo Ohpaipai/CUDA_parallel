@@ -10,14 +10,14 @@
 #define degree2ofN 1048576
 int array[degree2ofN];
 int s_array[degree2ofN];
-void b_sort(int _start, int _length, bool _flag){
+void b_sort(int _start, int _end, bool _flag){
 	int i,j,k;
 	int count;
-	int _num = _length -_start;
+	int _num = _end -_start;
 	if(_flag == true){ // Ascending
 		for(i=_num/2;i>0;i/=2){ //need to change 距離差距 跟計次 如假設 交換為 0 2代表差距2 那這樣下次還要交換 0 1
 			count =0;
-			for(j = _start; i+j<_length; j++){//交換幾個
+			for(j = _start; i+j<_end; j++){//交換幾個
 				if(count < i){
 					if(array[j]>array[i+j])
 						std::swap(array[j],array[i+j]);
@@ -36,7 +36,7 @@ void b_sort(int _start, int _length, bool _flag){
 		k=1;
 		for(i=_num/2;i>0;i/=2){
 			count =0;
-			for(j = _start; i+j<_length; j++){
+			for(j = _start; i+j<_end; j++){
 				if(count < i){
 					if(array[j]<array[i+j])
 						std::swap(array[j],array[i+j]);
